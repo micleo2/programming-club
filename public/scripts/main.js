@@ -16,6 +16,18 @@ function Player(x, y, id){
     ellipse(this.x, this.y, 12, 12);
   };
 }
+
+function drawRemotePlayer(p){
+  fill(0);
+  ellipse(p.x, p.y, 12, 12);
+}
+
+function drawOtherPlayers(){
+  for (var i = 0; i < players.length; i++){
+    drawRemotePlayer(players[i]);
+  }
+}
+
 function getRandomInt(min, max){
   return Math.floor(Math.random() * (max - min + 1)) * min;
 }
@@ -50,11 +62,32 @@ void keyReleased(){
 
 void setup(){
   size(width, height);
+  socket.emit("newPlayer", player);
 }
 
 void draw(){
   background(255);
   handleInput();
   player.draw();
+  drawOtherPlayers();
   socket.emit("playerUpdate", player);
 }
+
+function findById(id){
+  for (var i = 0; i < players.length; i++){
+    if (players[i].id === id){
+      return i;
+    }
+  }
+  return -1;
+}
+
+socket.on("playerJoined", function(remotePlayer){
+  players.push(remotePlayer);
+});
+
+socket.on("playerUpdate", function(remotePlayer){
+  var updatedIndex = findById(remotePlayer.id);
+  updatedIndex = updatedIndex == -1 ? players.length : updatedIndex;
+  players[updatedIndex] = remotePlayer;
+});

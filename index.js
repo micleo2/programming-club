@@ -7,9 +7,13 @@ var path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on("connection", function(socket){
+  socket.on("newPlayer", function(p){
+    p.id = socket.id;
+    socket.broadcast.emit("playerJoined", p);
+  });
   socket.on("playerUpdate", function(p){
     p.id = socket.id;
-    socket.broadcast.emit("drawRemotePlayer", p);
+    socket.broadcast.emit("playerUpdate", p);
   });
 });
 
