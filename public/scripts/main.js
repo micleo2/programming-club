@@ -11,14 +11,18 @@ function Player(x, y, id){
   this.y = y;
   this.id = id;
 
+  this.r = Math.floor(Math.random() * 255);
+  this.g = Math.floor(Math.random() * 255);
+  this.b = Math.floor(Math.random() * 255);
+
   this.draw = function(){
-    fill(0);
+    fill(this.r, this.g, this.b);
     ellipse(this.x, this.y, 12, 12);
   };
 }
 
 function drawRemotePlayer(p){
-  fill(0);
+  fill(p.r, p.g, p.b);
   ellipse(p.x, p.y, 12, 12);
 }
 
