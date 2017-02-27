@@ -1,0 +1,27 @@
+<html>
+
+<head>
+  <style>
+  #canvas-container {
+    width: 100%;
+  }
+  #canvas {
+    display: inline;
+  }
+  </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <title>
+        A Simple HTML Document
+    </title>
+</head>
+
+<body>
+  <script src="/scripts/processingLibrary.js"></script>
+  <script src="/scripts/main.js" type="text/processing" data-processing-target="mycanvas"></script>
+  <div id="canvas-container">
+    <canvas id="mycanvas">Sorry, your browser doesn't support the canvas</canvas>
+  </div>
+</body>
+
+</html>
