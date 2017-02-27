@@ -7,8 +7,9 @@ var path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on("connection", function(socket){
-  socket.on("playerUpdate", function(x, y){
-    socket.broadcast.emit("drawRemotePlayer", x, y);
+  socket.on("playerUpdate", function(p){
+    p.id = socket.id;
+    socket.broadcast.emit("drawRemotePlayer", p);
   });
 });
 
