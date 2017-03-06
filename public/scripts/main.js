@@ -11,6 +11,7 @@ function Player(x, y, id){
   this.y = y;
   this.radius = 6;
   this.id = id;
+  this.boost = 300;
 
   this.r = Math.floor(Math.random() * 255);
   this.g = Math.floor(Math.random() * 255);
@@ -18,13 +19,15 @@ function Player(x, y, id){
 
   this.draw = function(){
     fill(this.r, this.g, this.b);
+    text(this.boost, this.x, this.y-this.radius*2.5);
     ellipse(this.x, this.y, this.radius*2, this.radius*2);
   };
 }
 
 function drawRemotePlayer(p){
   fill(p.r, p.g, p.b);
-  ellipse(p.x, p.y, 12, 12);
+  text(p.boost, p.x, p.y-p.radius*2.5);
+  ellipse(p.x, p.y, p.radius*2, p.radius*2);
 }
 
 function drawOtherPlayers(){
@@ -42,7 +45,12 @@ function getRandomColor(){
 }
 
 function handleInput(){
-  var speed = 3;
+  var speed = 2;
+  if (keys[66] && player.boost > 0){
+    player.boost--;
+    speed = 6;
+  }
+
   if (keys[87]){
     player.y -= speed;
   }
