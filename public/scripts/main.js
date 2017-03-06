@@ -95,3 +95,8 @@ socket.on("playerUpdate", function(remotePlayer){
   updatedIndex = updatedIndex == -1 ? players.length : updatedIndex;
   players[updatedIndex] = remotePlayer;
 });
+
+socket.on("playerLeft", function(id){
+  var leftIndex = findById(id);
+  players.splice(leftIndex, 1);
+});
