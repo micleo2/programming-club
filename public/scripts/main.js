@@ -58,7 +58,7 @@ function handleInput(){
   //left and right bounds
   if (player.x < -player.radius){
     player.x = width + player.radius;
-  }else if (player.y > width + player.radius){
+  }else if (player.x > width + player.radius){
     player.x = -player.radius;
   }
   //up and down bounds
