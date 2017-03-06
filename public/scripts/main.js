@@ -9,6 +9,7 @@ var players = [];
 function Player(x, y, id){
   this.x = x;
   this.y = y;
+  this.radius = 6;
   this.id = id;
 
   this.r = Math.floor(Math.random() * 255);
@@ -17,7 +18,7 @@ function Player(x, y, id){
 
   this.draw = function(){
     fill(this.r, this.g, this.b);
-    ellipse(this.x, this.y, 12, 12);
+    ellipse(this.x, this.y, this.radius*2, this.radius*2);
   };
 }
 
@@ -53,6 +54,18 @@ function handleInput(){
   }
   if (keys[68]){
     player.x += speed;
+  }
+  //left and right bounds
+  if (player.x < -player.radius){
+    player.x = width + player.radius;
+  }else if (player.y > width + player.radius){
+    player.x = -player.radius;
+  }
+  //up and down bounds
+  if (player.y < -player.radius){
+    player.y = height + player.radius;
+  }else if (player.y > height + player.radius){
+    player.y = -player.radius;
   }
 }
 
