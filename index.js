@@ -4,6 +4,7 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var path = require('path');
 var socketPool = {};
+var it = null;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -18,11 +19,30 @@ io.on("connection", function(socket){
     socket.broadcast.emit("playerUpdate", p);
   });
   socket.on("disconnect", function(){
-    io.emit("playerLeft", socket.id);
     delete socketPool[socket.id];
+    if (it.id == socket.id){
+      console.log('need a new it guy');
+      it = pickRandomProperty(socketPool);
+      if (it != null){
+        it.emit("urIt");
+      }
+    }
+    io.emit("playerLeft", socket.id);
   });
+  if (it == null){
+    socket.emit("urIt");
+    it = socket;
+  }
 });
 
+function pickRandomProperty(obj) {
+    var result = null;
+    var count = 0;
+    for (var prop in obj)
+        if (Math.random() < 1/++count)
+           result = obj[prop];
+    return result;
+}
 http.listen(3000, function(){
   console.log("Started on port *3000");
 });

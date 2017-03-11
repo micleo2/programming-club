@@ -12,21 +12,35 @@ function Player(x, y, id){
   this.radius = 6;
   this.id = id;
   this.boost = 300;
+  this.score = 0;
+  this.isIt = false;
 
   this.r = Math.floor(Math.random() * 255);
   this.g = Math.floor(Math.random() * 255);
   this.b = Math.floor(Math.random() * 255);
 
   this.draw = function(){
-    fill(this.r, this.g, this.b);
-    text(this.boost, this.x, this.y-this.radius*2.5);
+    textSize(7);
+    if (this.isIt){
+      fill(255, 0, 0);
+      text("I'M IT", this.x-7, this.y+this.radius*2.5);
+    }else{
+      fill(this.r, this.g, this.b);
+    }
+    text(this.score, this.x-3, this.y-this.radius*1.5);
     ellipse(this.x, this.y, this.radius*2, this.radius*2);
   };
 }
 
 function drawRemotePlayer(p){
-  fill(p.r, p.g, p.b);
-  text(p.boost, p.x, p.y-p.radius*2.5);
+  textSize(7);
+  if (p.isIt){
+    fill(255, 0, 0);
+    text("I'M IT", p.x-7, p.y+p.radius*2.5);
+  }else{
+    fill(p.r, p.g, p.b);
+  }
+  text(p.score, p.x-3, p.y-p.radius*1.5);
   ellipse(p.x, p.y, p.radius*2, p.radius*2);
 }
 
@@ -121,3 +135,8 @@ socket.on("playerLeft", function(id){
   var leftIndex = findById(id);
   players.splice(leftIndex, 1);
 });
+
+socket.on("urIt", function(){
+  player.isIt = true;
+  console.log("IM IT");
+})
