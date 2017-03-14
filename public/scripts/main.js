@@ -24,6 +24,7 @@ function Player(x, y, id){
     if (this.isIt){
       fill(255, 0, 0);
       text("I'M IT", this.x-7, this.y+this.radius*2.5);
+      this.score++;
     }else{
       fill(this.r, this.g, this.b);
     }
@@ -33,15 +34,7 @@ function Player(x, y, id){
 }
 
 function drawRemotePlayer(p){
-  textSize(7);
-  if (p.isIt){
-    fill(255, 0, 0);
-    text("I'M IT", p.x-7, p.y+p.radius*2.5);
-  }else{
-    fill(p.r, p.g, p.b);
-  }
-  text(p.score, p.x-3, p.y-p.radius*1.5);
-  ellipse(p.x, p.y, p.radius*2, p.radius*2);
+  p.draw();
 }
 
 function drawOtherPlayers(){
@@ -91,6 +84,23 @@ function handleInput(){
   }
 }
 
+function intersects(that){
+  dx = player.x - that.x;
+  dy = player.y - that.y;
+  dr = player.radius + that.radius;
+  console.log(dx * dx + dy * dy + " ... " + (dr * dr));
+  return (dx * dx + dy * dy < dr * dr);
+}
+
+function handleCollisions() {
+  for (var i = 0; i < players.length; i++) {
+    var cur = players[i];
+    if (intersects(cur)){
+      socket.emit("touchedIt", cur);
+    }
+  }
+}
+
 void keyPressed(){
   keys[keyCode] = true;
 }
@@ -109,6 +119,9 @@ void draw(){
   handleInput();
   player.draw();
   drawOtherPlayers();
+  if (!player.isIt){
+    handleCollisions();
+  }
   socket.emit("playerUpdate", player);
 }
 
@@ -123,9 +136,11 @@ function findById(id){
 
 socket.on("playerJoined", function(remotePlayer){
   players.push(remotePlayer);
+  remotePlayer.draw = player.draw;
 });
 
 socket.on("playerUpdate", function(remotePlayer){
+  remotePlayer.draw = player.draw;
   var updatedIndex = findById(remotePlayer.id);
   updatedIndex = updatedIndex == -1 ? players.length : updatedIndex;
   players[updatedIndex] = remotePlayer;
@@ -140,3 +155,9 @@ socket.on("urIt", function(){
   player.isIt = true;
   console.log("IM IT");
 })
+
+socket.on("relocate", function() {
+  player.x = 60 + Math.random()*(width - 60);
+  player.y = 60 + Math.random()*(height - 60);
+  player.isIt = false;
+});

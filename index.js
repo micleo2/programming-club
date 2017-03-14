@@ -21,7 +21,6 @@ io.on("connection", function(socket){
   socket.on("disconnect", function(){
     delete socketPool[socket.id];
     if (it.id == socket.id){
-      console.log('need a new it guy');
       it = pickRandomProperty(socketPool);
       if (it != null){
         it.emit("urIt");
@@ -29,6 +28,10 @@ io.on("connection", function(socket){
     }
     io.emit("playerLeft", socket.id);
   });
+  socket.on("touchedIt", function(oldIt){
+    socket.emit("urIt");
+    socketPool[oldIt.id].emit("relocate");
+  })
   if (it == null){
     socket.emit("urIt");
     it = socket;
