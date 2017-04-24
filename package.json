@@ -1,0 +1,30 @@
+{
+  "name": "reverse-tag",
+  "version": "1.0.0",
+  "description": "A game that is opposite of tag",
+  "main": "index.js",
+  "dependencies": {
+    "socket.io": "^1.7.2",
+    "express": "^4.14.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micleo2/tag.git"
+  },
+  "keywords": [
+    "tag",
+    "online",
+    "multiplayer"
+  ],
+  "author": "Michael Leon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/micleo2/tag/issues"
+  },
+  "homepage": "https://github.com/micleo2/tag#readme"
+}
