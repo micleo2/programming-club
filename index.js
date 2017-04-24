@@ -5,7 +5,7 @@ var io = require("socket.io")(http);
 var path = require('path');
 var socketPool = {};
 var it = null; //the socket handle which is currently 'it'
-var winningScore = 50;
+var winningScore = 100;
 var port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
