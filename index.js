@@ -4,7 +4,8 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var path = require('path');
 var socketPool = {};
-var it = null;
+var it = null; //the socket handle which is currently 'it'
+var winningScore = 50;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -17,14 +18,14 @@ io.on("connection", function(socket){
   socket.on("playerUpdate", function(p){
     p.id = socket.id;
     socket.broadcast.emit("playerUpdate", p);
+    if (p.score >= winningScore){
+      createNewGame(socket);
+    }
   });
   socket.on("disconnect", function(){
     delete socketPool[socket.id];
     if (it.id == socket.id){
-      it = pickRandomProperty(socketPool);
-      if (it != null){
-        it.emit("urIt");
-      }
+      chooseIt();
     }
     io.emit("playerLeft", socket.id);
   });
@@ -38,6 +39,14 @@ io.on("connection", function(socket){
   }
 });
 
+function chooseIt(){
+  it = pickRandomProperty(socketPool);
+  if (it != null){
+    it.emit("urIt");
+  }
+}
+
+//following source code taken from http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object/15106541
 function pickRandomProperty(obj) {
     var result = null;
     var count = 0;
@@ -46,6 +55,13 @@ function pickRandomProperty(obj) {
            result = obj[prop];
     return result;
 }
+
+function createNewGame(socketChamp){
+  socketChamp.emit("newGame", true);
+  socketChamp.broadcast.emit("newGame", false);
+  chooseIt();
+}
+
 http.listen(3000, function(){
   console.log("Started on port *3000");
 });
