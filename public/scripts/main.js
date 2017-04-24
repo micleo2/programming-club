@@ -166,6 +166,12 @@ socket.on("urIt", function(){
   console.log("IM IT");
 })
 
+socket.on("relocate", function() {
+  player.x = 60 + Math.random()*(width - 60);
+  player.y = 60 + Math.random()*(height - 60);
+  player.isIt = false;
+});
+
 socket.on("newGame", function(won) {
   player = createPlayer();
   if (won){
