@@ -6,6 +6,7 @@ var path = require('path');
 var socketPool = {};
 var it = null; //the socket handle which is currently 'it'
 var winningScore = 50;
+var port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -62,6 +63,12 @@ function createNewGame(socketChamp){
   chooseIt();
 }
 
-http.listen(3000, function(){
-  console.log("Started on port *3000");
-});
+if (process.env.IP){
+  http.listen(process.env.PORT || port, process.env.IP, function(){
+    console.log('listening on *:' + (process.env.PORT || port));
+  });
+}else{
+  http.listen(process.env.PORT || port, function(){
+    console.log('listening on *:' + (process.env.PORT || port));
+  });
+}
