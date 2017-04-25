@@ -97,14 +97,13 @@ function intersects(that){
   dx = player.x - that.x;
   dy = player.y - that.y;
   dr = player.radius + that.radius;
-  console.log(dx * dx + dy * dy + " ... " + (dr * dr));
   return (dx * dx + dy * dy < dr * dr);
 }
 
 function handleCollisions() {
   for (var i = 0; i < players.length; i++) {
     var cur = players[i];
-    if (intersects(cur)){
+    if (intersects(cur) && cur.isIt){
       socket.emit("touchedIt", cur);
     }
   }
